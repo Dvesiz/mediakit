@@ -6,6 +6,7 @@
 import { initRouter } from './router.js'
 import { initTheme } from './common/theme.js'
 import { renderNavbar, renderFooter } from './common/layout.js'
+import { initToast } from './common/toast.js'
 
 function init() {
   // 渲染导航栏和页脚
@@ -14,6 +15,9 @@ function init() {
 
   // 初始化主题
   initTheme()
+
+  // 初始化 Toast 系统
+  initToast()
 
   // 初始化路由
   initRouter()

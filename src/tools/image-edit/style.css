@@ -101,6 +101,10 @@
   background: var(--color-accent);
   color: #fff;
 }
+.ie-btn-full {
+  width: 100%;
+  margin-bottom: var(--spacing-sm);
+}
 
 /* 裁剪比例选择 */
 .ie-crop-ratios {
@@ -123,6 +127,10 @@
   accent-color: var(--color-accent);
   cursor: pointer;
   min-width: 0;
+}
+.ie-slider-row .ie-slider-label {
+  flex: 1;
+  margin: 0;
 }
 
 .ie-slider-value {

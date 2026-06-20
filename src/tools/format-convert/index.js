@@ -5,11 +5,13 @@
 import './style.css'
 import { createDropZone, formatFileSize } from '../../common/uploader.js'
 import { convertImage, loadImage, formatSize, getOutputFilename, downloadBlob, FORMATS } from './utils.js'
+import { showToast } from '../../common/toast.js'
+import { ICONS } from '../../common/icons.js'
 
 export function render(container) {
   container.innerHTML = `
     <div class="tool-header">
-      <h2>🔄 格式转换</h2>
+        <h2>${ICONS.convert} 格式转换</h2>
       <p>图片格式互转，PNG ↔ JPG ↔ WebP ↔ BMP，保持原尺寸</p>
     </div>
 
@@ -18,7 +20,7 @@ export function render(container) {
 
       <div id="fc-workspace" style="display:none">
         <!-- 文件信息 -->
-        <div class="fc-file-info" style="display:flex;gap:var(--spacing-lg);flex-wrap:wrap;margin-bottom:var(--spacing-md);font-size:var(--font-size-sm);color:var(--color-text-secondary)">
+        <div class="fc-file-info">
           <span id="fc-file-name"></span>
           <span id="fc-file-size"></span>
           <span id="fc-file-dims"></span>
@@ -35,7 +37,7 @@ export function render(container) {
               <option value="image/bmp">BMP</option>
             </select>
           </label>
-          <button class="btn btn-primary" id="fc-convert-btn">🔄 转换</button>
+          <button class="btn btn-primary" id="fc-convert-btn">${ICONS.refresh} 转换</button>
           <button class="btn btn-secondary" id="fc-download-btn" disabled>下载</button>
           <button class="btn btn-secondary" id="fc-reset-btn">重新选择</button>
         </div>
@@ -43,12 +45,12 @@ export function render(container) {
         <!-- 对比预览 -->
         <div class="fc-layout">
           <div class="fc-preview-box">
-            <h4>📷 原始图片</h4>
+            <h4>${ICONS.camera} 原始图片</h4>
             <img id="fc-original-preview" alt="原始图片" />
             <p class="fc-info" id="fc-original-info"></p>
           </div>
           <div class="fc-preview-box">
-            <h4>📦 转换结果</h4>
+            <h4>${ICONS.compress} 转换结果</h4>
             <img id="fc-result-preview" alt="转换结果" />
             <p class="fc-info" id="fc-result-info"></p>
           </div>
@@ -120,7 +122,7 @@ export function render(container) {
       const firstEnabled = targetFormat.querySelector('option:not(:disabled)')
       if (firstEnabled) targetFormat.value = firstEnabled.value
     } catch (err) {
-      alert('加载图片失败：' + err.message)
+      showToast('加载图片失败：' + err.message, 'error')
     }
   }
 
@@ -130,7 +132,7 @@ export function render(container) {
 
     const target = targetFormat.value
     convertBtn.disabled = true
-    convertBtn.textContent = '⏳ 转换中...'
+    convertBtn.innerHTML = '转换中...'
     resultPreview.style.opacity = '0.5'
 
     try {
@@ -153,7 +155,7 @@ export function render(container) {
       resultInfo.innerHTML = `<span style="color:var(--color-error)">转换失败：${err.message}</span>`
     } finally {
       convertBtn.disabled = false
-      convertBtn.textContent = '🔄 转换'
+      convertBtn.innerHTML = '${ICONS.refresh} 转换'
     }
   }
 

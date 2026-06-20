@@ -7,11 +7,12 @@ import { downloadCanvasPng, generateQrCanvas } from './modules/generator.js'
 import { decodeQrFromFile } from './modules/parser.js'
 import { buildWifiQrText } from './modules/wifi.js'
 import { loadImageFromFile } from './utils/canvas.js'
+import { ICONS } from '../../common/icons.js'
 
 export function render(container) {
   container.innerHTML = `
     <div class="tool-header">
-      <h2>📱 二维码工坊</h2>
+        <h2>${ICONS.qrcode} 二维码工坊</h2>
       <p>生成/解码二维码，支持 Logo 合成、WiFi 配置</p>
     </div>
 
@@ -63,8 +64,8 @@ export function render(container) {
               <input name="logo" type="file" accept="image/*" />
             </label>
             <div class="qw-actions">
-              <button class="qw-btn qw-btn-primary" type="submit">生成二维码</button>
-              <button class="qw-btn qw-btn-ghost" type="button" data-download-generator disabled>下载 PNG</button>
+              <button class="btn btn-primary" type="submit">生成二维码</button>
+              <button class="btn btn-secondary" type="button" data-download-generator disabled>下载 PNG</button>
             </div>
           </form>
           <aside class="qw-result-card">
@@ -94,7 +95,7 @@ export function render(container) {
             <p class="qw-status" data-parser-status>尚未上传图片。</p>
             <textarea data-parser-output rows="6" readonly placeholder="解析结果会显示在这里"></textarea>
             <div class="qw-actions">
-              <button class="qw-btn qw-btn-ghost" type="button" data-copy-parser disabled>复制结果</button>
+              <button class="btn btn-secondary" type="button" data-copy-parser disabled>复制结果</button>
             </div>
             <div class="qw-wifi-hint" data-parser-wifi hidden></div>
           </aside>
@@ -138,8 +139,8 @@ export function render(container) {
               <code data-wifi-text>填写表单后自动生成</code>
             </details>
             <div class="qw-actions">
-              <button class="qw-btn qw-btn-primary" type="submit">生成 WiFi 二维码</button>
-              <button class="qw-btn qw-btn-ghost" type="button" data-download-wifi disabled>下载 PNG</button>
+              <button class="btn btn-primary" type="submit">生成 WiFi 二维码</button>
+              <button class="btn btn-secondary" type="button" data-download-wifi disabled>下载 PNG</button>
             </div>
           </form>
           <aside class="qw-result-card">

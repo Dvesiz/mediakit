@@ -1,6 +1,9 @@
 /**
  * 格式转换工具 - 核心转换逻辑
  */
+import { loadImage, formatSize, downloadBlob } from '../../common/image-utils.js'
+
+export { loadImage, formatSize, downloadBlob }
 
 // 支持的格式元信息
 export const FORMATS = {
@@ -59,55 +62,8 @@ export function convertImage(img, targetType, quality = 0.92) {
 }
 
 /**
- * 加载图片文件
- * @param {File} file
- * @returns {Promise<HTMLImageElement>}
- */
-export function loadImage(file) {
-  return new Promise((resolve, reject) => {
-    if (!file || !file.type.startsWith('image/')) {
-      reject(new Error('请上传图片文件'))
-      return
-    }
-
-    const reader = new FileReader()
-    reader.onerror = () => reject(new Error('文件读取失败'))
-    reader.onload = () => {
-      const img = new Image()
-      img.onerror = () => reject(new Error('图片加载失败'))
-      img.onload = () => resolve(img)
-      img.src = reader.result
-    }
-    reader.readAsDataURL(file)
-  })
-}
-
-/**
- * 格式化文件大小
- */
-export function formatSize(bytes) {
-  if (bytes === 0) return '0 B'
-  const units = ['B', 'KB', 'MB']
-  const k = 1024
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + units[i]
-}
-
-/**
  * 从原始文件名和目标格式生成新文件名
  */
 export function getOutputFilename(originalName, targetExt) {
   return originalName.replace(/\.[^.]+$/, '') + '.' + targetExt
-}
-
-/**
- * 下载 Blob
- */
-export function downloadBlob(blob, filename) {
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-  a.click()
-  URL.revokeObjectURL(url)
 }

@@ -3,17 +3,18 @@
  */
 
 import { toggleTheme } from './theme.js'
+import { ICONS } from './icons.js'
 
 // 工具导航配置
 const navTools = [
-  { id: null,        label: '🏠 首页' },
-  { id: 'image-compress', label: '📦 压缩' },
-  { id: 'format-convert', label: '🔄 转换' },
-  { id: 'image-edit',     label: '✂️ 编辑' },
-  { id: 'video-tools',    label: '🎬 视频' },
-  { id: 'audio-tools',    label: '🎵 音频' },
-  { id: 'qr-workshop',    label: '📱 二维码' },
-  { id: 'color-lab',      label: '🎨 取色' },
+  { id: null,        icon: ICONS.home,    label: '首页' },
+  { id: 'image-compress', icon: ICONS.compress, label: '压缩' },
+  { id: 'format-convert', icon: ICONS.convert,  label: '转换' },
+  { id: 'image-edit',     icon: ICONS.edit,     label: '编辑' },
+  { id: 'video-tools',    icon: ICONS.video,    label: '视频' },
+  { id: 'audio-tools',    icon: ICONS.audio,    label: '音频' },
+  { id: 'qr-workshop',    icon: ICONS.qrcode,   label: '二维码' },
+  { id: 'color-lab',      icon: ICONS.color,    label: '取色' },
 ]
 
 export function renderNavbar() {
@@ -27,9 +28,9 @@ export function renderNavbar() {
       </div>
       <nav class="header-nav">
         ${navTools.map(t => `
-          <button class="nav-btn" data-tool="${t.id || ''}">${t.label}</button>
+          <button class="nav-btn" data-tool="${t.id || ''}">${t.icon} ${t.label}</button>
         `).join('')}
-        <button id="theme-toggle" class="theme-toggle" aria-label="切换主题">☀️</button>
+        <button id="theme-toggle" class="theme-toggle" aria-label="切换主题">${ICONS.sun}</button>
       </nav>
     </div>
   `
@@ -52,6 +53,6 @@ export function renderFooter() {
 
   footer.innerHTML = `
     <p>MediaKit · 纯前端媒体工具箱 · 所有处理在浏览器本地完成</p>
-    <p style="margin-top: var(--spacing-xs);">Made with ❤️ · 隐私优先 · 无需上传</p>
+    <p style="margin-top: var(--spacing-xs);">Made with ${ICONS.heart} · 隐私优先 · 无需上传</p>
   `
 }

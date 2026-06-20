@@ -115,6 +115,16 @@
   color: #fff;
 }
 
+/* 文件信息行 */
+.fc-file-info {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
 /* 响应式 */
 @media (max-width: 768px) {
   .fc-layout {

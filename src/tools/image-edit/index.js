@@ -16,11 +16,13 @@ import {
   canvasToDataUrl,
   formatSize,
 } from './utils.js'
+import { showToast } from '../../common/toast.js'
+import { ICONS } from '../../common/icons.js'
 
 export function render(container) {
   container.innerHTML = `
     <div class="tool-header">
-      <h2>✂️ 图片编辑</h2>
+        <h2>${ICONS.edit} 图片编辑</h2>
       <p>裁剪、旋转、翻转、缩放、滤镜，基础图片处理</p>
     </div>
 
@@ -48,7 +50,7 @@ export function render(container) {
                   <button class="ie-btn" data-crop="4:3">4:3</button>
                   <button class="ie-btn" data-crop="16:9">16:9</button>
                 </div>
-                <button class="ie-btn" id="ie-crop-apply" style="width:100%;margin-bottom:var(--spacing-sm)">应用裁剪</button>
+                <button class="ie-btn ie-btn-full" id="ie-crop-apply">应用裁剪</button>
 
                 <label>旋转</label>
                 <div class="ie-btn-group">
@@ -68,7 +70,7 @@ export function render(container) {
                   <input type="range" id="ie-scale" min="10" max="200" value="100" />
                   <span class="ie-slider-value" id="ie-scale-value">100%</span>
                 </div>
-                <button class="ie-btn" id="ie-scale-apply" style="width:100%">应用缩放</button>
+                <button class="ie-btn ie-btn-full" id="ie-scale-apply">应用缩放</button>
               </div>
             </div>
 
@@ -77,7 +79,7 @@ export function render(container) {
               <div class="ie-section-header" data-toggle>滤镜 <span>▼</span></div>
               <div class="ie-section-body">
                 <div class="ie-slider-row">
-                  <label style="flex:1;margin:0">灰度</label>
+                  <label class="ie-slider-label">灰度</label>
                   <input type="range" id="ie-filter-grayscale" min="0" max="100" value="0" />
                   <span class="ie-slider-value" id="ie-filter-grayscale-value">0%</span>
                 </div>
@@ -101,7 +103,7 @@ export function render(container) {
                   <input type="range" id="ie-filter-blur" min="0" max="10" value="0" step="0.5" />
                   <span class="ie-slider-value" id="ie-filter-blur-value">0px</span>
                 </div>
-                <button class="ie-btn" id="ie-filter-apply" style="width:100%">应用滤镜</button>
+                <button class="ie-btn ie-btn-full" id="ie-filter-apply">应用滤镜</button>
               </div>
             </div>
           </div>
@@ -190,7 +192,7 @@ export function render(container) {
       uploadArea.style.display = 'none'
       workspace.style.display = 'block'
     } catch (err) {
-      alert('加载图片失败：' + err.message)
+      showToast('加载图片失败：' + err.message, 'error')
     }
   }
 
@@ -276,7 +278,7 @@ export function render(container) {
       renderCanvas()
       updateInfo()
     } catch (err) {
-      alert('操作失败：' + err.message)
+      showToast('操作失败：' + err.message, 'error')
     }
   }
 
@@ -411,7 +413,7 @@ export function render(container) {
       a.click()
       URL.revokeObjectURL(url)
     } catch (err) {
-      alert('下载失败：' + err.message)
+      showToast('下载失败：' + err.message, 'error')
     }
   })
 

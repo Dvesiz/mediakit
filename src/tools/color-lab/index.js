@@ -1,14 +1,16 @@
 /**
  * 颜色实验室 - 占位（第二阶段开发）
  */
+import { ICONS } from '../../common/icons.js'
+
 export function render(container) {
   container.innerHTML = `
     <div class="tool-header">
-      <h2>🎨 颜色实验室</h2>
-      <p>功能开发中，敬请期待...</p>
+      <h2>${ICONS.color} 颜色实验室</h2>
+      <p>取色器、调色板、颜色转换（开发中）</p>
     </div>
-    <div class="tool-body" style="display:flex;align-items:center;justify-content:center;min-height:300px;color:var(--color-text-muted);font-size:var(--font-size-lg)">
-      <p>⏳ 图片取色、调色板生成、颜色格式互转等功能将在第二阶段上线</p>
+    <div class="tool-body tool-placeholder">
+      <p>即将上线，敬请期待</p>
     </div>
   `
   return () => {}

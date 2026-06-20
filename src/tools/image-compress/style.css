@@ -207,6 +207,14 @@
   margin-bottom: var(--spacing-md);
 }
 
+/* 操作按钮区 */
+.ic-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  margin-top: var(--spacing-md);
+}
+
 /* 响应式 */
 @media (max-width: 768px) {
   .ic-compare {

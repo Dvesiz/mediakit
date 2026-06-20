@@ -5,11 +5,13 @@
 import './style.css'
 import { createDropZone, formatFileSize } from '../../common/uploader.js'
 import { compressImage, loadImage, formatSize, calcRatio, downloadBlob, needsResize } from './utils.js'
+import { showToast } from '../../common/toast.js'
+import { ICONS } from '../../common/icons.js'
 
 export function render(container) {
   container.innerHTML = `
     <div class="tool-header">
-      <h2>📦 图片压缩</h2>
+        <h2>${ICONS.compress} 图片压缩</h2>
       <p>浏览器本地压缩 PNG / JPG / WebP，实时对比预览</p>
     </div>
 
@@ -21,13 +23,13 @@ export function render(container) {
         <div class="ic-file-info" id="ic-file-info"></div>
 
         <!-- 极小图片警告 -->
-        <div class="ic-tiny-warning" id="ic-tiny-warning" style="display:none">
-          ⚠️ 图片尺寸过小（< 100px），不进行压缩
-        </div>
+    <div class="ic-tiny-warning" id="ic-tiny-warning" style="display:none">
+      ${ICONS.alert} 图片尺寸过小（< 100px），不进行压缩
+    </div>
 
         <!-- 低压缩率警告 -->
         <div class="ic-low-ratio-warning" id="ic-low-ratio-warning" style="display:none">
-          ℹ️ 该图片已高度压缩，继续压缩可能效果不明显
+          ${ICONS.alert} 该图片已高度压缩，继续压缩可能效果不明显
         </div>
 
         <!-- 质量调节 -->
@@ -50,19 +52,19 @@ export function render(container) {
         <!-- 对比预览 -->
         <div class="ic-compare">
           <div class="ic-compare-item">
-            <h4>📷 原始图片</h4>
+            <h4>${ICONS.camera} 原始图片</h4>
             <img class="ic-preview" id="ic-original-preview" alt="原始图片" />
             <p class="ic-info" id="ic-original-info"></p>
           </div>
           <div class="ic-compare-item">
-            <h4>📦 压缩后</h4>
+            <h4>${ICONS.compress} 压缩后</h4>
             <img class="ic-preview" id="ic-compressed-preview" alt="压缩后图片" />
             <p class="ic-info" id="ic-compressed-info"></p>
           </div>
         </div>
 
         <!-- 操作按钮 -->
-        <div class="ic-actions" style="display:flex; gap:var(--spacing-md); flex-wrap:wrap; margin-top:var(--spacing-md)">
+        <div class="ic-actions">
           <button class="btn btn-primary" id="ic-download">下载压缩图片</button>
           <button class="btn btn-secondary" id="ic-reset">重新选择</button>
         </div>
@@ -136,7 +138,7 @@ export function render(container) {
       // 执行压缩
       await doCompress()
     } catch (err) {
-      alert('加载图片失败：' + err.message)
+      showToast('加载图片失败：' + err.message, 'error')
     } finally {
       isProcessing = false
     }
