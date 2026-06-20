@@ -1,0 +1,208 @@
+/* 图片编辑工具样式 */
+
+.ie-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
+  min-height: 400px;
+}
+
+.ie-canvas-area {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  min-height: 300px;
+}
+
+.ie-canvas-area canvas {
+  max-width: 100%;
+  max-height: 480px;
+  display: block;
+}
+
+.ie-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.ie-section {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.ie-section-header {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-bg-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.ie-section-header:hover {
+  background: var(--color-bg-hover);
+}
+
+.ie-section-body {
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: none;
+}
+
+.ie-section.is-open .ie-section-body {
+  display: block;
+}
+
+.ie-section-body label {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xs);
+  font-weight: 600;
+}
+
+/* 按钮组 */
+.ie-btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+}
+
+.ie-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.ie-btn:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.ie-btn.is-active {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* 裁剪比例选择 */
+.ie-crop-ratios {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* 滑块 */
+.ie-slider-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.ie-slider-row input[type="range"] {
+  flex: 1;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+  min-width: 0;
+}
+
+.ie-slider-value {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-accent);
+  min-width: 3em;
+  text-align: right;
+}
+
+/* 底部操作栏 */
+.ie-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  margin-top: var(--spacing-md);
+}
+
+/* 信息栏 */
+.ie-info {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-sm);
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.ie-info strong {
+  color: var(--color-text-primary);
+}
+
+/* 裁剪覆盖层 */
+.ie-crop-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.ie-crop-box {
+  position: absolute;
+  border: 2px solid var(--color-accent);
+  background: rgba(233, 69, 96, 0.08);
+  cursor: move;
+  pointer-events: auto;
+}
+
+.ie-crop-handle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--color-accent);
+  background: var(--color-bg-card);
+  border-radius: 50%;
+}
+
+.ie-crop-handle.nw { top: -6px; left: -6px; cursor: nw-resize; }
+.ie-crop-handle.ne { top: -6px; right: -6px; cursor: ne-resize; }
+.ie-crop-handle.sw { bottom: -6px; left: -6px; cursor: sw-resize; }
+.ie-crop-handle.se { bottom: -6px; right: -6px; cursor: se-resize; }
+
+/* 上传区域覆盖 */
+#ie-upload-area .drop-zone {
+  min-height: 200px;
+}
+
+/* 响应式 */
+@media (max-width: 900px) {
+  .ie-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .ie-canvas-area {
+    min-height: 200px;
+  }
+
+  .ie-canvas-area canvas {
+    max-height: 320px;
+  }
+}

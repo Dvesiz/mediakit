@@ -1,0 +1,128 @@
+/* 格式转换工具样式 */
+
+.fc-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
+}
+
+.fc-preview-box {
+  text-align: center;
+}
+
+.fc-preview-box h4 {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-sm);
+  font-weight: 600;
+}
+
+.fc-preview-box img {
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-secondary);
+}
+
+.fc-info {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-xs);
+}
+
+.fc-info strong {
+  color: var(--color-text-primary);
+}
+
+.fc-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  align-items: center;
+  margin: var(--spacing-md) 0;
+}
+
+.fc-controls label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.fc-controls select {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+}
+
+.fc-controls select:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-light);
+  outline: none;
+}
+
+.fc-batch-list {
+  margin-top: var(--spacing-lg);
+}
+
+.fc-batch-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-size-sm);
+}
+
+.fc-batch-item:last-child {
+  border-bottom: none;
+}
+
+.fc-batch-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fc-result-badge {
+  font-size: var(--font-size-xs);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+}
+
+.fc-result-badge.success {
+  background: var(--color-success);
+  color: #fff;
+}
+
+.fc-result-badge.pending {
+  background: var(--color-warning);
+  color: #000;
+}
+
+.fc-result-badge.error {
+  background: var(--color-error);
+  color: #fff;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .fc-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .fc-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

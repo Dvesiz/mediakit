@@ -1,0 +1,17 @@
+{
+  "name": "MediaKit - 媒体工具箱",
+  "short_name": "MediaKit",
+  "description": "纯前端媒体工具箱，图片、视频、音频处理、二维码工坊，全部本地处理",
+  "start_url": "/mediakit/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

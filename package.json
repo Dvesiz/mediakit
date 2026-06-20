@@ -1,0 +1,26 @@
+{
+  "name": "mediakit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "MediaKit - 纯前端媒体工具箱：图片压缩/转换/编辑、视频音频处理、二维码工坊、颜色萃取",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.10",
+    "@ffmpeg/util": "^0.12.1",
+    "jsqr": "^1.4.0",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0",
+    "vite": "^8.0.16",
+    "vitest": "^4.1.9"
+  }
+}

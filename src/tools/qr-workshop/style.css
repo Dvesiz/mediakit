@@ -1,0 +1,504 @@
+/* 二维码工坊 - 工具专用样式 */
+/* 基于 MediaKit CSS 变量适配 */
+
+/* === 标签栏 === */
+.qw-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-bg-secondary);
+  margin-bottom: 16px;
+}
+
+.qw-tab {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill, 999px);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.qw-tab:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-hover);
+}
+
+.qw-tab.is-active {
+  border-color: var(--color-border);
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* === 面板布局 === */
+.qw-panel {
+  display: none;
+}
+
+.qw-panel.is-active {
+  display: block;
+}
+
+.qw-panel-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+.qw-panel-desc {
+  padding: 8px 4px;
+}
+
+.qw-panel-desc h3 {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  margin-bottom: var(--spacing-xs);
+}
+
+.qw-panel-desc p {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+}
+
+/* === 卡片 === */
+.qw-card {
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-secondary);
+}
+
+.qw-result-card {
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-card);
+  align-content: start;
+}
+
+/* === 表单 === */
+.qw-card label {
+  display: grid;
+  gap: 6px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+}
+
+.qw-card label:last-of-type {
+  margin-bottom: var(--spacing-md);
+}
+
+.qw-card input,
+.qw-card select,
+.qw-card textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.qw-card input:focus,
+.qw-card select:focus,
+.qw-card textarea:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-light);
+}
+
+.qw-card input:disabled,
+.qw-card select:disabled,
+.qw-card textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.qw-card textarea {
+  resize: vertical;
+}
+
+.qw-card input[type="color"] {
+  min-height: 42px;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.qw-card input[type="file"] {
+  color: var(--color-text-muted);
+  padding: 8px;
+}
+
+.qw-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.qw-checkbox-label {
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.qw-checkbox-label input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-accent);
+}
+
+/* === 按钮 === */
+.qw-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: var(--spacing-md);
+}
+
+.qw-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 10px 18px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.qw-btn-primary {
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+  box-shadow: 0 4px 14px var(--color-accent-light);
+}
+
+.qw-btn-primary:hover {
+  background: var(--color-accent-hover);
+}
+
+.qw-btn-ghost {
+  background: transparent;
+  color: var(--color-text-primary);
+}
+
+.qw-btn-ghost:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-accent);
+}
+
+.qw-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.qw-btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* === 二维码展示区 === */
+.qw-stage {
+  position: relative;
+  display: grid;
+  min-height: 260px;
+  place-items: center;
+  padding: var(--spacing-lg);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-muted);
+  font-weight: 600;
+  text-align: center;
+  overflow: hidden;
+}
+
+.qw-stage canvas {
+  width: min(100%, 320px) !important;
+  height: auto !important;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  cursor: zoom-in;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.qw-stage canvas:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: var(--shadow-lg);
+}
+
+/* === 状态信息 === */
+.qw-status {
+  margin: var(--spacing-md) 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.qw-status[data-type="loading"] {
+  color: var(--color-warning);
+}
+
+.qw-status[data-type="success"] {
+  color: var(--color-success);
+}
+
+.qw-status[data-type="error"] {
+  color: var(--color-error);
+}
+
+/* === 拖拽上传区 === */
+.qw-dropzone {
+  min-height: 240px;
+  display: grid;
+  place-items: center;
+  border-style: dashed;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.qw-dropzone input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.qw-dropzone label {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  min-height: 200px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  gap: 8px;
+  margin: 0 !important;
+}
+
+.qw-dropzone strong {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-primary);
+}
+
+.qw-dropzone span {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.qw-dropzone:hover,
+.qw-dropzone:focus-within,
+.qw-dropzone.is-dragging {
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.qw-dropzone.is-dragging {
+  transform: translateY(-1px);
+}
+
+/* === 解析结果 === */
+.qw-parser-result textarea[readonly] {
+  min-height: 120px;
+  background: var(--color-bg-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  width: 100%;
+  color: var(--color-text-primary);
+  resize: vertical;
+}
+
+.qw-wifi-hint {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  margin-top: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-accent-light);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.qw-wifi-hint strong {
+  color: var(--color-text-primary);
+}
+
+/* === 详情折叠 === */
+.qw-details {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.qw-details summary {
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+}
+
+.qw-details code {
+  display: block;
+  margin-top: 8px;
+  word-break: break-all;
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  line-height: 1.6;
+}
+
+/* === Toast 提示 === */
+.qw-toast {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 200;
+  max-width: min(360px, calc(100% - 36px));
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-text-primary);
+  color: var(--color-bg-primary);
+  box-shadow: var(--shadow-lg);
+  font-size: var(--font-size-sm);
+  opacity: 0;
+  transform: translateY(12px) scale(0.98);
+  transition: opacity var(--transition-normal), transform var(--transition-normal);
+  pointer-events: none;
+}
+
+.qw-toast.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* === 预览对话框 === */
+.qw-preview-dialog {
+  width: min(90vw, 680px);
+  max-height: min(84vh, 720px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-lg);
+  overflow: visible;
+}
+
+.qw-preview-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+}
+
+.qw-preview-dialog img {
+  width: min(100%, 580px);
+  height: auto;
+  max-height: 68vh;
+  margin: 0 auto;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.qw-preview-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-size: 1.4rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: all var(--transition-fast);
+}
+
+.qw-preview-close:hover {
+  background: var(--color-bg-hover);
+}
+
+/* === 响应式 === */
+@media (max-width: 1024px) {
+  .qw-panel-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .qw-panel-desc {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .qw-panel-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .qw-tabs {
+    grid-template-columns: 1fr;
+    border-radius: var(--radius-lg);
+  }
+
+  .qw-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .qw-actions {
+    flex-direction: column;
+  }
+
+  .qw-actions button {
+    width: 100%;
+  }
+
+  .qw-stage {
+    min-height: 200px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qw-tab,
+  .qw-btn,
+  .qw-stage canvas,
+  .qw-dropzone,
+  .qw-toast {
+    transition-duration: 1ms !important;
+  }
+
+  .qw-stage canvas:hover,
+  .qw-dropzone.is-dragging {
+    transform: none;
+  }
+}

@@ -1,0 +1,225 @@
+/* 图片压缩工具样式 */
+
+.ic-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  margin: var(--spacing-lg) 0;
+}
+
+.ic-compare-item {
+  text-align: center;
+}
+
+.ic-compare-item h4 {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-sm);
+  font-weight: 600;
+}
+
+.ic-compare-item .ic-preview {
+  width: 100%;
+  max-height: 360px;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-secondary);
+}
+
+.ic-info {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-xs);
+}
+
+.ic-info strong {
+  color: var(--color-text-primary);
+}
+
+.ic-info .ic-success {
+  color: var(--color-success);
+}
+
+.ic-info .ic-warning {
+  color: var(--color-warning);
+}
+
+/* 质量控件 */
+.ic-quality-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  flex-wrap: wrap;
+}
+
+.ic-quality-row label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.ic-quality-row input[type="range"] {
+  flex: 1;
+  min-width: 160px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+.ic-quality-value {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-accent);
+  min-width: 3ch;
+  text-align: center;
+}
+
+.ic-quality-value::after {
+  content: '%';
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* 格式选择 */
+.ic-format-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  flex-wrap: wrap;
+}
+
+.ic-format-row label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.ic-format-select {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+}
+
+.ic-format-select:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-light);
+  outline: none;
+}
+
+/* 批量处理区 */
+.ic-batch {
+  margin-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--spacing-lg);
+}
+
+.ic-batch-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-size-sm);
+}
+
+.ic-batch-item:last-child {
+  border-bottom: none;
+}
+
+.ic-batch-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ic-batch-status {
+  font-size: var(--font-size-xs);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+}
+
+.ic-batch-status.done {
+  background: var(--color-success);
+  color: #fff;
+}
+
+.ic-batch-status.pending {
+  background: var(--color-warning);
+  color: #000;
+}
+
+.ic-batch-status.error {
+  background: var(--color-error);
+  color: #fff;
+}
+
+/* 文件信息行 */
+.ic-file-info {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.ic-file-info span {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.ic-file-info .ic-label {
+  color: var(--color-text-muted);
+}
+
+.ic-tiny-warning {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-warning);
+  color: #000;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+}
+
+.ic-low-ratio-warning {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-accent-light);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .ic-compare {
+    grid-template-columns: 1fr;
+  }
+
+  .ic-quality-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ic-file-info {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+}
