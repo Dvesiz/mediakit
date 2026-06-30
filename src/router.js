@@ -12,6 +12,8 @@
  *   (空)               首页工具网格
  */
 
+import { ICONS } from './common/icons.js'
+
 // 工具模块注册表：lazy load 入口
 const toolRegistry = {
   'image-compress': () => import('./tools/image-compress/index.js'),
@@ -97,13 +99,13 @@ async function navigate(toolId) {
  */
 function renderHomeGrid() {
   const tools = [
-    { id: 'image-compress', icon: '📦', name: '图片压缩', desc: '压缩 PNG/JPG/WebP，实时预览对比，支持批量处理', tag: '图片' },
-    { id: 'format-convert', icon: '🔄', name: '格式转换', desc: '图片/视频/音频格式互转，一键批量转换', tag: '媒体' },
-    { id: 'image-edit', icon: '✂️', name: '图片编辑', desc: '裁剪、旋转、翻转、滤镜，基础图片处理', tag: '图片' },
-    { id: 'video-tools', icon: '🎬', name: '视频工具', desc: '视频压缩、转 GIF、格式转换', tag: '视频' },
-    { id: 'audio-tools', icon: '🎵', name: '音频工具', desc: '音频压缩、格式转换、音量调整', tag: '音频' },
-    { id: 'qr-workshop', icon: '📱', name: '二维码工坊', desc: '生成/解码二维码，支持 Logo 合成、WiFi 配置', tag: '二维码' },
-    { id: 'color-lab', icon: '🎨', name: '颜色实验室', desc: '图片取色、调色板生成、颜色格式互转', tag: '色彩' },
+    { id: 'image-compress', icon: ICONS.compress, name: '图片压缩', desc: '压缩 PNG/JPG/WebP，实时预览对比，支持批量处理', tag: '图片' },
+    { id: 'format-convert', icon: ICONS.convert, name: '格式转换', desc: '图片/视频/音频格式互转，一键批量转换', tag: '媒体' },
+    { id: 'image-edit', icon: ICONS.edit, name: '图片编辑', desc: '裁剪、旋转、翻转、滤镜，基础图片处理', tag: '图片' },
+    { id: 'video-tools', icon: ICONS.video, name: '视频工具', desc: '视频压缩、转 GIF、格式转换', tag: '视频' },
+    { id: 'audio-tools', icon: ICONS.audio, name: '音频工具', desc: '音频压缩、格式转换、音量调整', tag: '音频' },
+    { id: 'qr-workshop', icon: ICONS.qrcode, name: '二维码工坊', desc: '生成/解码二维码，支持 Logo 合成、WiFi 配置', tag: '二维码' },
+    { id: 'color-lab', icon: ICONS.color, name: '颜色实验室', desc: '图片取色、调色板生成、颜色格式互转', tag: '色彩' },
   ]
 
   const grid = document.getElementById('tool-grid')
@@ -131,7 +133,10 @@ function renderHomeGrid() {
  */
 function updateNavActive(toolId) {
   document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.tool === toolId)
+    const btnToolId = btn.dataset.tool || null
+    const isActive = btnToolId === toolId
+    btn.classList.toggle('active', isActive)
+    btn.setAttribute('aria-current', isActive ? 'page' : 'false')
   })
 }
 

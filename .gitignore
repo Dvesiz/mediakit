@@ -11,3 +11,6 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# AI Agent
+.omc/

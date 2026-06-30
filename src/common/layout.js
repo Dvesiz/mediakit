@@ -28,8 +28,9 @@ export function renderNavbar() {
       </div>
       <nav class="header-nav">
         ${navTools.map(t => `
-          <button class="nav-btn" data-tool="${t.id || ''}">${t.icon} ${t.label}</button>
+          <button class="nav-btn" data-tool="${t.id || ''}">${t.icon}<span>${t.label}</span></button>
         `).join('')}
+        <a class="nav-icon-link" href="https://github.com/Dvesiz/mediakit" target="_blank" rel="noopener noreferrer" aria-label="在 GitHub 查看源码" title="GitHub 仓库">${ICONS.github}</a>
         <button id="theme-toggle" class="theme-toggle" aria-label="切换主题">${ICONS.sun}</button>
       </nav>
     </div>

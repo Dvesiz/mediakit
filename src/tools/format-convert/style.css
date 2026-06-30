@@ -37,6 +37,11 @@
   color: var(--color-text-primary);
 }
 
+.fc-info-error {
+  color: var(--color-error);
+  font-weight: 600;
+}
+
 .fc-controls {
   display: flex;
   flex-wrap: wrap;

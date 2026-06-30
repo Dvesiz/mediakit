@@ -171,14 +171,57 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
+  z-index: 5;
 }
 
 .ie-crop-box {
   position: absolute;
   border: 2px solid var(--color-accent);
   background: rgba(233, 69, 96, 0.08);
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);
   cursor: move;
   pointer-events: auto;
+}
+
+/* 三分构图参考线 */
+.ie-crop-box::before,
+.ie-crop-box::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to right, transparent calc(33.33% - 0.5px), rgba(255,255,255,0.35) calc(33.33% - 0.5px) calc(33.33% + 0.5px), transparent calc(33.33% + 0.5px)),
+    linear-gradient(to right, transparent calc(66.66% - 0.5px), rgba(255,255,255,0.35) calc(66.66% - 0.5px) calc(66.66% + 0.5px), transparent calc(66.66% + 0.5px));
+}
+.ie-crop-box::after {
+  background:
+    linear-gradient(to bottom, transparent calc(33.33% - 0.5px), rgba(255,255,255,0.35) calc(33.33% - 0.5px) calc(33.33% + 0.5px), transparent calc(33.33% + 0.5px)),
+    linear-gradient(to bottom, transparent calc(66.66% - 0.5px), rgba(255,255,255,0.35) calc(66.66% - 0.5px) calc(66.66% + 0.5px), transparent calc(66.66% + 0.5px));
+}
+
+/* 裁剪尺寸标签 */
+.ie-crop-size {
+  position: absolute;
+  left: 50%;
+  bottom: -28px;
+  transform: translateX(-50%);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: #fff;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* 裁剪操作提示 */
+.ie-tip {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.4;
 }
 
 .ie-crop-handle {

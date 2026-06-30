@@ -2,6 +2,8 @@
  * MediaKit - 主题切换
  */
 
+import { ICONS } from './icons.js'
+
 const THEME_KEY = 'mediakit-theme'
 
 function getPreferredTheme() {
@@ -14,7 +16,7 @@ function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme)
   const btn = document.getElementById('theme-toggle')
   if (btn) {
-    btn.textContent = theme === 'dark' ? '☀️' : '🌙'
+    btn.innerHTML = theme === 'dark' ? ICONS.sun : ICONS.moon
     btn.setAttribute('aria-label', theme === 'dark' ? '切换亮色主题' : '切换暗色主题')
   }
 }

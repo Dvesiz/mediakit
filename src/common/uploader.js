@@ -4,6 +4,8 @@
  * 提供一个标准的拖拽上传区域，支持文件类型和数量限制。
  */
 
+import { ICONS } from './icons.js'
+
 /**
  * 创建拖拽上传区域
  * @param {Object} options
@@ -11,20 +13,22 @@
  * @param {boolean} options.multiple - 是否允许多文件
  * @param {number} options.maxSize - 单个文件最大字节数
  * @param {function(File[]): void} options.onFiles - 文件选择回调
+ * @param {function(string): void} options.onError - 错误提示回调（如文件超限）
  * @returns {HTMLElement} dropZone 元素
  */
 export function createDropZone(options = {}) {
   const {
     accept = '*',
     multiple = false,
-    maxSize = 0, // 0 表示不限制
+    maxSize = 0,
     onFiles = () => {},
+    onError = () => {},
   } = options
 
   const zone = document.createElement('div')
   zone.className = 'drop-zone'
   zone.innerHTML = `
-    <div class="drop-icon">📂</div>
+    <div class="drop-icon">${ICONS.upload}</div>
     <div class="drop-text">拖拽文件到此处</div>
     <div class="drop-hint">或点击选择文件</div>
   `
@@ -67,6 +71,11 @@ export function createDropZone(options = {}) {
 
   function handleFiles(files) {
     if (maxSize > 0) {
+      const oversized = files.filter(f => f.size > maxSize)
+      if (oversized.length > 0) {
+        const label = formatFileSize(maxSize)
+        onError(`文件超过大小限制（${label}）`)
+      }
       files = files.filter(f => f.size <= maxSize)
     }
     if (files.length > 0) {

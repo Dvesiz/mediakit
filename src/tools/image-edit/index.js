@@ -35,6 +35,15 @@ export function render(container) {
           <!-- 左侧预览 -->
           <div class="ie-canvas-area" id="ie-canvas-area">
             <canvas id="ie-canvas"></canvas>
+            <div class="ie-crop-overlay" id="ie-crop-overlay" style="display:none">
+              <div class="ie-crop-box" id="ie-crop-box">
+                <div class="ie-crop-handle nw" data-handle="nw"></div>
+                <div class="ie-crop-handle ne" data-handle="ne"></div>
+                <div class="ie-crop-handle sw" data-handle="sw"></div>
+                <div class="ie-crop-handle se" data-handle="se"></div>
+                <div class="ie-crop-size" id="ie-crop-size"></div>
+              </div>
+            </div>
           </div>
 
           <!-- 右侧控制面板 -->
@@ -45,11 +54,12 @@ export function render(container) {
               <div class="ie-section-body">
                 <label>裁剪比例</label>
                 <div class="ie-crop-ratios">
-                  <button class="ie-btn is-active" data-crop="free">自由</button>
+                  <button class="ie-btn" data-crop="free">自由</button>
                   <button class="ie-btn" data-crop="1:1">1:1</button>
                   <button class="ie-btn" data-crop="4:3">4:3</button>
                   <button class="ie-btn" data-crop="16:9">16:9</button>
                 </div>
+                <p class="ie-tip">选择比例后拖动选框 / 拖角调整，点"应用裁剪"生效</p>
                 <button class="ie-btn ie-btn-full" id="ie-crop-apply">应用裁剪</button>
 
                 <label>旋转</label>
@@ -130,7 +140,7 @@ export function render(container) {
   let historyStack = []    // 撤销栈（存储 dataUrl）
   let redoStack = []       // 重做栈
   const MAX_HISTORY = 20
-  let cropRatio = null     // 'free' | '1:1' | '4:3' | '16:9'
+  let baseScale = 1        // 显示基准：图像像素 → CSS px（首帧适应预览区后固定）
 
   // --- DOM 引用 ---
   const uploadArea = document.getElementById('ie-upload-area')
@@ -162,7 +172,8 @@ export function render(container) {
     accept: 'image/png,image/jpeg,image/webp',
     multiple: false,
     maxSize: 50 * 1024 * 1024,
-    onFiles: (files) => handleFile(files[0])
+    onFiles: (files) => handleFile(files[0]),
+    onError: (msg) => showToast(msg, 'error')
   })
   uploadArea.appendChild(dropZone)
 
@@ -185,12 +196,17 @@ export function render(container) {
       redoStack = []
       updateHistoryButtons()
 
-      // 渲染
-      renderCanvas()
-      updateInfo()
-
+      // 先显示工作区，才能取到预览区真实宽度
       uploadArea.style.display = 'none'
       workspace.style.display = 'block'
+
+      // 计算显示基准：原图适应预览区时的比例，后续缩放/裁剪以此为准 → 变化可见
+      const maxW = canvasArea.clientWidth - 4
+      const fitW = maxW > 0 ? maxW / originalCanvas.width : 1
+      baseScale = Math.min(1, fitW, 480 / originalCanvas.height)
+
+      renderCanvas()
+      updateInfo()
     } catch (err) {
       showToast('加载图片失败：' + err.message, 'error')
     }
@@ -204,14 +220,24 @@ export function render(container) {
     canvas.width = currentCanvas.width
     canvas.height = currentCanvas.height
 
-    // 自动缩放显示
+    // 显示尺寸 = 像素尺寸 × 基准比例，再受预览区上限约束 → 缩放/裁剪变化按比例可见
     const maxW = canvasArea.clientWidth - 4
     const maxH = 480
-    const scale = Math.min(1, maxW / currentCanvas.width, maxH / currentCanvas.height)
-    canvas.style.width = (currentCanvas.width * scale) + 'px'
-    canvas.style.height = (currentCanvas.height * scale) + 'px'
+    let displayW = currentCanvas.width * baseScale
+    let displayH = currentCanvas.height * baseScale
+    const fit = Math.min(1, maxW > 0 ? maxW / displayW : 1, maxH / displayH)
+    displayW *= fit
+    displayH *= fit
+    canvas.style.width = displayW + 'px'
+    canvas.style.height = displayH + 'px'
 
     ctx.drawImage(currentCanvas, 0, 0)
+
+    // 若裁剪选框可见，同步其位置
+    if (cropOverlay && cropOverlay.style.display !== 'none' && cropBox) {
+      syncOverlay()
+      renderCropBox()
+    }
   }
 
   // --- 保存快照 ---
@@ -231,6 +257,7 @@ export function render(container) {
     const prevUrl = historyStack.pop()
     loadCanvasFromDataUrl(prevUrl)
     updateHistoryButtons()
+    hideCrop()
   }
 
   // --- 重做 ---
@@ -240,6 +267,7 @@ export function render(container) {
     const nextUrl = redoStack.pop()
     loadCanvasFromDataUrl(nextUrl)
     updateHistoryButtons()
+    hideCrop()
   }
 
   function loadCanvasFromDataUrl(url) {
@@ -277,6 +305,7 @@ export function render(container) {
       currentCanvas = operationFn(currentCanvas)
       renderCanvas()
       updateInfo()
+      hideCrop()
     } catch (err) {
       showToast('操作失败：' + err.message, 'error')
     }
@@ -305,60 +334,188 @@ export function render(container) {
 
   scaleApply.addEventListener('click', () => {
     const pct = parseInt(scaleSlider.value)
-    if (pct === 100) return
+    if (pct === 100) {
+      showToast('当前为 100%，请先调整缩放比例', 'info')
+      return
+    }
     applyOperation((c) => scaleCanvas(c, pct))
+    showToast(`已缩放至 ${currentCanvas.width} × ${currentCanvas.height}`, 'success')
     scaleSlider.value = '100'
     scaleValue.textContent = '100%'
   })
 
-  // --- 事件: 裁剪比例 ---
+  // ===== 裁剪选框预览 =====
+  const cropOverlay = document.getElementById('ie-crop-overlay')
+  const cropBoxEl = document.getElementById('ie-crop-box')
+  const cropSizeEl = document.getElementById('ie-crop-size')
+  const CROP_RATIOS = { '1:1': 1, '4:3': 4 / 3, '16:9': 16 / 9 }
+  let cropBox = null          // {x,y,w,h} 选框在显示区的坐标(px)
+  let cropActiveRatio = null  // null=未激活 | 'free' | '1:1' | '4:3' | '16:9'
+  let dragState = null
+
+  const ratioValue = (key) => (key === 'free' ? null : CROP_RATIOS[key])
+
+  // 将 overlay 精确对齐到 canvas 实际显示区域
+  function syncOverlay() {
+    cropOverlay.style.left = canvas.offsetLeft + 'px'
+    cropOverlay.style.top = canvas.offsetTop + 'px'
+    cropOverlay.style.width = canvas.offsetWidth + 'px'
+    cropOverlay.style.height = canvas.offsetHeight + 'px'
+  }
+
+  // 按比例在显示区内居中初始化选框
+  function initCropBox(ratioKey) {
+    const W = canvas.offsetWidth
+    const H = canvas.offsetHeight
+    const r = ratioValue(ratioKey)
+    let bw = W * 0.8
+    let bh = r ? bw / r : H * 0.8
+    if (bh > H * 0.9) {
+      bh = H * 0.8
+      bw = r ? bh * r : W * 0.8
+    }
+    if (bw > W) bw = W
+    cropBox = { x: (W - bw) / 2, y: (H - bh) / 2, w: bw, h: bh }
+  }
+
+  function renderCropBox() {
+    if (!cropBox) return
+    cropBoxEl.style.left = cropBox.x + 'px'
+    cropBoxEl.style.top = cropBox.y + 'px'
+    cropBoxEl.style.width = cropBox.w + 'px'
+    cropBoxEl.style.height = cropBox.h + 'px'
+    const sx = currentCanvas.width / canvas.offsetWidth
+    cropSizeEl.textContent = `${Math.round(cropBox.w * sx)} × ${Math.round(cropBox.h * sx)}`
+  }
+
+  function showCrop(ratioKey) {
+    if (!currentCanvas) return
+    cropActiveRatio = ratioKey
+    syncOverlay()
+    initCropBox(ratioKey)
+    renderCropBox()
+    cropOverlay.style.display = 'block'
+  }
+
+  function hideCrop() {
+    cropOverlay.style.display = 'none'
+    cropBox = null
+    cropActiveRatio = null
+    document.querySelectorAll('[data-crop]').forEach(b => b.classList.remove('is-active'))
+  }
+
+  function clampBox() {
+    const W = canvas.offsetWidth, H = canvas.offsetHeight
+    cropBox.w = Math.min(cropBox.w, W)
+    cropBox.h = Math.min(cropBox.h, H)
+    cropBox.x = Math.max(0, Math.min(cropBox.x, W - cropBox.w))
+    cropBox.y = Math.max(0, Math.min(cropBox.y, H - cropBox.h))
+  }
+
+  // 选框拖动 / 角缩放
+  cropBoxEl.addEventListener('mousedown', (e) => {
+    if (!cropBox) return
+    e.preventDefault()
+    const rect = cropOverlay.getBoundingClientRect()
+    dragState = {
+      handle: e.target.dataset.handle || null,
+      startX: e.clientX - rect.left,
+      startY: e.clientY - rect.top,
+      box0: { ...cropBox },
+    }
+  })
+
+  function onCropDrag(e) {
+    if (!dragState) return
+    const W = canvas.offsetWidth, H = canvas.offsetHeight
+    const rect = cropOverlay.getBoundingClientRect()
+    const b0 = dragState.box0
+    const r = ratioValue(cropActiveRatio)
+
+    if (!dragState.handle) {
+      // 整体移动
+      const dx = (e.clientX - rect.left) - dragState.startX
+      const dy = (e.clientY - rect.top) - dragState.startY
+      cropBox.x = b0.x + dx
+      cropBox.y = b0.y + dy
+      clampBox()
+    } else {
+      // 角缩放：固定对角为锚点
+      const mx = Math.max(0, Math.min(e.clientX - rect.left, W))
+      const my = Math.max(0, Math.min(e.clientY - rect.top, H))
+      const anchors = {
+        se: { ax: b0.x, ay: b0.y },
+        ne: { ax: b0.x, ay: b0.y + b0.h },
+        sw: { ax: b0.x + b0.w, ay: b0.y },
+        nw: { ax: b0.x + b0.w, ay: b0.y + b0.h },
+      }
+      const { ax, ay } = anchors[dragState.handle]
+      const dirX = mx >= ax ? 1 : -1
+      const dirY = my >= ay ? 1 : -1
+      let nw = Math.abs(mx - ax)
+      let nh = r ? nw / r : Math.abs(my - ay)
+      const maxW = dirX > 0 ? W - ax : ax
+      const maxH = dirY > 0 ? H - ay : ay
+      if (nw > maxW) { nw = maxW; if (r) nh = nw / r }
+      if (nh > maxH) { nh = maxH; if (r) nw = nh * r }
+      nw = Math.max(nw, 24)
+      nh = Math.max(nh, 24)
+      cropBox = {
+        x: dirX > 0 ? ax : ax - nw,
+        y: dirY > 0 ? ay : ay - nh,
+        w: nw,
+        h: nh,
+      }
+    }
+    renderCropBox()
+  }
+
+  function onCropUp() { dragState = null }
+
+  function onWindowResize() {
+    if (cropOverlay.style.display !== 'none' && cropBox) {
+      syncOverlay()
+      clampBox()
+      renderCropBox()
+    }
+  }
+
+  window.addEventListener('mousemove', onCropDrag)
+  window.addEventListener('mouseup', onCropUp)
+  window.addEventListener('resize', onWindowResize)
+
+  // --- 事件: 选择裁剪比例 → 显示选框预览 ---
   document.querySelectorAll('[data-crop]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('[data-crop]').forEach(b => b.classList.remove('is-active'))
       btn.classList.add('is-active')
-      cropRatio = btn.dataset.crop
+      showCrop(btn.dataset.crop)
     })
   })
 
-  // --- 事件: 应用裁剪 ---
+  // --- 事件: 应用裁剪（按选框真正裁剪） ---
   cropApply.addEventListener('click', () => {
     if (!currentCanvas) return
-    if (!cropRatio || cropRatio === 'free') {
-      // 自由裁剪：从左上角裁掉 10% 边距（简化版，实际应有交互选框）
-      const marginX = Math.round(currentCanvas.width * 0.05)
-      const marginY = Math.round(currentCanvas.height * 0.05)
-      if (marginX <= 0 && marginY <= 0) return
-      applyOperation((c) => cropCanvas(c, {
-        x: marginX, y: marginY,
-        width: c.width - marginX * 2,
-        height: c.height - marginY * 2,
-      }))
+    if (!cropBox || cropOverlay.style.display === 'none') {
+      showToast('请先选择裁剪比例并调整选框', 'info')
       return
     }
-
-    // 固定比例裁剪
-    const ratios = { '1:1': 1, '4:3': 4/3, '16:9': 16/9 }
-    const targetRatio = ratios[cropRatio]
-    if (!targetRatio) return
-
-    const w = currentCanvas.width
-    const h = currentCanvas.height
-    const currentRatio = w / h
-
-    let cropW, cropH, x, y
-    if (currentRatio > targetRatio) {
-      cropH = h
-      cropW = h * targetRatio
-      x = (w - cropW) / 2
-      y = 0
-    } else {
-      cropW = w
-      cropH = w / targetRatio
-      x = 0
-      y = (h - cropH) / 2
+    const sx = currentCanvas.width / canvas.offsetWidth
+    const sy = currentCanvas.height / canvas.offsetHeight
+    const region = {
+      x: Math.round(cropBox.x * sx),
+      y: Math.round(cropBox.y * sy),
+      width: Math.round(cropBox.w * sx),
+      height: Math.round(cropBox.h * sy),
     }
+    // 约束到画布范围内
+    region.x = Math.max(0, Math.min(region.x, currentCanvas.width - 1))
+    region.y = Math.max(0, Math.min(region.y, currentCanvas.height - 1))
+    region.width = Math.min(region.width, currentCanvas.width - region.x)
+    region.height = Math.min(region.height, currentCanvas.height - region.y)
+    if (region.width < 1 || region.height < 1) return
 
-    applyOperation((c) => cropCanvas(c, { x, y, width: cropW, height: cropH }))
+    applyOperation((c) => cropCanvas(c, region))
   })
 
   // --- 事件: 应用滤镜 ---
@@ -398,6 +555,7 @@ export function render(container) {
     updateHistoryButtons()
     renderCanvas()
     updateInfo()
+    hideCrop()
   })
 
   // --- 事件: 下载 ---
@@ -428,6 +586,8 @@ export function render(container) {
   })
 
   return () => {
-    // cleanup
+    window.removeEventListener('mousemove', onCropDrag)
+    window.removeEventListener('mouseup', onCropUp)
+    window.removeEventListener('resize', onWindowResize)
   }
 }

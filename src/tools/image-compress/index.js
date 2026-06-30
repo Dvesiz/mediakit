@@ -102,7 +102,8 @@ export function render(container) {
     accept: 'image/png,image/jpeg,image/webp',
     multiple: false,
     maxSize: 50 * 1024 * 1024, // 50MB
-    onFiles: (files) => handleFile(files[0])
+    onFiles: (files) => handleFile(files[0]),
+    onError: (msg) => showToast(msg, 'error')
   })
   uploadArea.appendChild(dropZone)
 

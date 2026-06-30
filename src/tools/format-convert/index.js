@@ -64,6 +64,8 @@ export function render(container) {
   let originalImage = null
   let resultBlob = null
   let resultFormat = null
+  const MAX_DIMENSION = 8000
+  const MAX_PIXELS = 64_000_000
 
   // --- DOM 引用 ---
   const uploadArea = document.getElementById('fc-upload-area')
@@ -85,7 +87,8 @@ export function render(container) {
     accept: 'image/png,image/jpeg,image/webp,image/bmp',
     multiple: false,
     maxSize: 50 * 1024 * 1024,
-    onFiles: (files) => handleFile(files[0])
+    onFiles: (files) => handleFile(files[0]),
+    onError: (msg) => showToast(msg, 'error')
   })
   uploadArea.appendChild(dropZone)
 
@@ -121,14 +124,35 @@ export function render(container) {
       // 选中第一个启用的
       const firstEnabled = targetFormat.querySelector('option:not(:disabled)')
       if (firstEnabled) targetFormat.value = firstEnabled.value
+
+      // 超大图片保护，避免 Canvas 转换时浏览器卡死或崩溃
+      const isTooLarge = isImageTooLarge(originalImage)
+      convertBtn.disabled = isTooLarge
+      if (isTooLarge) {
+        resultInfo.innerHTML = '<span class="fc-info-error">图片尺寸超过安全转换限制，请先压缩或缩放后再转换</span>'
+        showToast('图片尺寸过大，已禁用转换以保护浏览器稳定性', 'error')
+      }
     } catch (err) {
       showToast('加载图片失败：' + err.message, 'error')
     }
   }
 
   // --- 执行转换 ---
+  function isImageTooLarge(img) {
+    const pixelCount = img.naturalWidth * img.naturalHeight
+    return img.naturalWidth > MAX_DIMENSION ||
+      img.naturalHeight > MAX_DIMENSION ||
+      pixelCount > MAX_PIXELS
+  }
+
   async function doConvert() {
     if (!originalImage) return
+    if (isImageTooLarge(originalImage)) {
+      convertBtn.disabled = true
+      resultInfo.innerHTML = '<span class="fc-info-error">图片尺寸超过安全转换限制，请先压缩或缩放后再转换</span>'
+      showToast('图片尺寸过大，已禁用转换以保护浏览器稳定性', 'error')
+      return
+    }
 
     const target = targetFormat.value
     convertBtn.disabled = true
@@ -152,7 +176,7 @@ export function render(container) {
 
       downloadBtn.disabled = false
     } catch (err) {
-      resultInfo.innerHTML = `<span style="color:var(--color-error)">转换失败：${err.message}</span>`
+      resultInfo.innerHTML = `<span class="fc-info-error">转换失败：${err.message}</span>`
     } finally {
       convertBtn.disabled = false
       convertBtn.innerHTML = '${ICONS.refresh} 转换'
