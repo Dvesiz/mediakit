@@ -2,6 +2,7 @@
   "name": "mediakit",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "description": "MediaKit - 纯前端媒体工具箱：图片压缩/转换/编辑、视频音频处理、二维码工坊、颜色萃取",
   "scripts": {

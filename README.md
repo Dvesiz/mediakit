@@ -18,6 +18,7 @@
     <img src="https://img.shields.io/github/actions/workflow/status/Dvesiz/mediakit/deploy.yml?label=%E6%9E%84%E5%BB%BA&color=06D6A0" alt="构建">
     <img src="https://img.shields.io/badge/%E6%B5%8B%E8%AF%95-68%2F68%20%E9%80%9A%E8%BF%87-06D6A0" alt="测试">
     <img src="https://img.shields.io/badge/%E9%9A%90%E7%A7%81-100%25%20%E6%9C%AC%E5%9C%B0-EF476F" alt="隐私">
+    <img src="https://img.shields.io/github/license/Dvesiz/mediakit?color=06D6A0&label=%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE" alt="许可证">
   </p>
   <br>
 </div>
@@ -106,6 +107,15 @@ mediakit/
 └── package.json         # 依赖管理
 ```
 
+## 📜 开源协议
+
+本项目基于 [MIT 协议](LICENSE) 开源。
+
+```
+MIT License
+Copyright (c) 2026 Dvesiz
+```
+
 ## 🔒 隐私声明
 
 - ✅ **零数据上传** — 所有文件处理完全在浏览器本地完成
@@ -117,14 +127,14 @@ mediakit/
 
 | 阶段 | 版本 | 状态 |
 |------|------|------|
-| 第一阶段：图片工具 + 二维码 | v0.1 | ✅ 已完成 |
-| 第二阶段：音视频工具 + 颜色实验室 | v0.2 | 🟡 开发中 |
+| 第一阶段：图片工具 + 二维码 | v0.1 | ✅ 已完成（已发布） |
+| 第二阶段：音视频工具 + 颜色实验室 + 压缩体验改造 | v0.2 | ✅ 已完成（待发布） |
 | 第三阶段：打磨与增强 | v0.3 | 🔲 待办 |
 
 ---
 
 <div align="center">
-  <sub>Made with ❤️ · 纯前端 · 全本地 · 重隐私</sub>
+  <sub>Made with ❤️ · 纯前端 · 全本地 · 重隐私 · MIT Licensed</sub>
   <br>
   <a href="https://dvesiz.github.io/mediakit/" target="_blank">🚀 在线体验</a>
 </div>
