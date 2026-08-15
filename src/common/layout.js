@@ -1,21 +1,20 @@
-/**
- * MediaKit - 布局组件（导航栏 & 页脚）
- */
-
 import { toggleTheme } from './theme.js'
 import { ICONS } from './icons.js'
 
-// 工具导航配置
 const navTools = [
-  { id: null,        icon: ICONS.home,    label: '首页' },
+  { id: null, icon: ICONS.home, label: '首页' },
   { id: 'image-compress', icon: ICONS.compress, label: '压缩' },
-  { id: 'format-convert', icon: ICONS.convert,  label: '转换' },
-  { id: 'image-edit',     icon: ICONS.edit,     label: '编辑' },
-  { id: 'video-tools',    icon: ICONS.video,    label: '视频' },
-  { id: 'audio-tools',    icon: ICONS.audio,    label: '音频' },
-  { id: 'qr-workshop',    icon: ICONS.qrcode,   label: '二维码' },
-  { id: 'color-lab',      icon: ICONS.color,    label: '取色' },
+  { id: 'format-convert', icon: ICONS.convert, label: '转换' },
+  { id: 'image-edit', icon: ICONS.edit, label: '编辑' },
+  { id: 'video-tools', icon: ICONS.video, label: '视频' },
+  { id: 'audio-tools', icon: ICONS.audio, label: '音频' },
+  { id: 'qr-workshop', icon: ICONS.qrcode, label: '二维码' },
+  { id: 'color-lab', icon: ICONS.color, label: '取色' },
 ]
+
+export function getNavigationTools() {
+  return navTools
+}
 
 export function renderNavbar() {
   const header = document.getElementById('header')
@@ -23,37 +22,28 @@ export function renderNavbar() {
 
   header.innerHTML = `
     <div class="header-inner">
-      <div class="header-logo" onclick="window.location.hash='#/'">
-        <span class="logo-accent">M</span>ediaKit
-      </div>
-      <nav class="header-nav">
-        ${navTools.map(t => `
-          <button class="nav-btn" data-tool="${t.id || ''}">${t.icon}<span>${t.label}</span></button>
-        `).join('')}
-        <a class="nav-icon-link" href="https://github.com/Dvesiz/mediakit" target="_blank" rel="noopener noreferrer" aria-label="在 GitHub 查看源码" title="GitHub 仓库">${ICONS.github}</a>
-        <button id="theme-toggle" class="theme-toggle" aria-label="切换主题">${ICONS.sun}</button>
+      <button class="header-logo" type="button" aria-label="返回 MediaKit 首页">
+        <span class="logo-accent">MK</span>
+        <span><strong>MEDIAKIT</strong><small>LOCAL STUDIO</small></span>
+      </button>
+      <div class="header-status"><span></span>所有处理仅在本地完成</div>
+      <nav class="header-nav" aria-label="工具导航">
+        ${navTools.map(t => `<button class="nav-btn" data-tool="${t.id || ''}" title="${t.label}" aria-label="${t.label}">${t.icon}<span>${t.label}</span></button>`).join('')}
+        <a class="nav-icon-link" href="https://github.com/Dvesiz/mediakit" target="_blank" rel="noopener noreferrer" aria-label="GitHub 仓库" title="GitHub 仓库">${ICONS.github}</a>
+        <button id="theme-toggle" class="theme-toggle" aria-label="切换主题"></button>
       </nav>
-    </div>
-  `
+    </div>`
 
-  // 导航点击
+  header.querySelector('.header-logo').addEventListener('click', () => { window.location.hash = '#/' })
   header.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const toolId = btn.dataset.tool
-      window.location.hash = toolId ? `#/${toolId}` : '#/'
+      window.location.hash = btn.dataset.tool ? `#/${btn.dataset.tool}` : '#/'
     })
   })
-
-  // 主题切换
   document.getElementById('theme-toggle').addEventListener('click', toggleTheme)
 }
 
 export function renderFooter() {
   const footer = document.getElementById('footer')
-  if (!footer) return
-
-  footer.innerHTML = `
-    <p>MediaKit · 纯前端媒体工具箱 · 所有处理在浏览器本地完成</p>
-    <p style="margin-top: var(--spacing-xs);">Made with ${ICONS.heart} · 隐私优先 · 无需上传</p>
-  `
+  if (footer) footer.innerHTML = '<span>MEDIAKIT / 01</span><span>浏览器本地处理 · 隐私优先</span><span>© 2026</span>'
 }

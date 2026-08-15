@@ -6,10 +6,10 @@ import { ICONS } from './icons.js'
 
 const THEME_KEY = 'mediakit-theme'
 
-function getPreferredTheme() {
+export function getPreferredTheme() {
   const saved = localStorage.getItem(THEME_KEY)
   if (saved === 'light' || saved === 'dark') return saved
-  return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+  return 'light'
 }
 
 function applyTheme(theme) {
