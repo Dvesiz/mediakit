@@ -6,7 +6,15 @@
 
 ## 界面预览
 
-![MediaKit Liquid Glass 首页](docs/images/home-liquid-glass.png)
+桌面端通过左侧导航切换工具。首页将七个工具分为「图片」「音视频」「创作辅助」三组。
+
+![MediaKit 桌面工作台：左侧导航与三组工具列表](docs/images/workspace-desktop.png)
+
+<details>
+<summary>查看移动端界面</summary>
+
+<img src="docs/images/workspace-mobile.png" width="375" alt="MediaKit 移动端工作台：顶部导航与单列工具列表">
+</details>
 
 ## 功能
 
@@ -24,18 +32,22 @@
 
 - 所有文件均在浏览器本地处理
 - 无账号、无后端、无文件上传
-- 支持浅色与深色 Liquid Glass 主题
-- 响应式界面，适配桌面与移动设备
+- 支持浅色和深色主题，适配桌面与移动设备
+- 文件选择区支持拖拽，也可用键盘打开文件选择器
 - 视频和音频处理基于 FFmpeg.wasm
 
 ## 本地开发
 
+使用 Node.js 20.19+（20.x）或 22.12+。
+
 ```bash
 git clone https://github.com/Dvesiz/mediakit.git
 cd mediakit
-npm install
+npm ci
 npm run dev
 ```
+
+默认访问 `http://localhost:3000/mediakit/`。
 
 常用命令：
 
