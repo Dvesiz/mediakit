@@ -6,6 +6,29 @@
 
 import { ICONS } from './icons.js'
 
+export function selectFiles(files, { accept = '*', multiple = false, maxSize = 0, onError = () => {} } = {}) {
+  if (!multiple && files.length > 1) {
+    onError('一次只能选择一个文件')
+    return []
+  }
+
+  const rules = accept.toLowerCase().split(',').map(rule => rule.trim()).filter(Boolean)
+  const supported = rules.length === 0 || rules.includes('*') ? files : files.filter(file => {
+    const type = file.type.toLowerCase()
+    const name = file.name.toLowerCase()
+    return rules.some(rule => {
+      if (rule.startsWith('.')) return name.endsWith(rule)
+      if (rule.endsWith('/*')) return type.startsWith(rule.slice(0, -1))
+      return type === rule
+    })
+  })
+  if (supported.length < files.length) onError('不支持的文件格式')
+
+  const eligible = maxSize > 0 ? supported.filter(file => file.size <= maxSize) : supported
+  if (eligible.length < supported.length) onError(`文件超过大小限制（${formatFileSize(maxSize)}）`)
+  return eligible
+}
+
 /**
  * 创建拖拽上传区域
  * @param {Object} options
@@ -31,18 +54,18 @@ export function createDropZone(options = {}) {
     <div class="drop-icon">${ICONS.upload}</div>
     <div class="drop-text">拖拽文件到此处</div>
     <div class="drop-hint">或点击选择文件</div>
+    <button class="drop-trigger" type="button" aria-label="选择文件"></button>
   `
 
   // 隐藏的 file input
   const input = document.createElement('input')
   input.type = 'file'
-  input.accept = accept
+  input.accept = accept === '*' ? '' : accept
   input.multiple = multiple
   input.style.display = 'none'
   zone.appendChild(input)
 
-  // 点击触发文件选择
-  zone.addEventListener('click', () => input.click())
+  zone.querySelector('.drop-trigger').addEventListener('click', () => input.click())
 
   input.addEventListener('change', () => {
     if (input.files.length > 0) {
@@ -70,17 +93,8 @@ export function createDropZone(options = {}) {
   })
 
   function handleFiles(files) {
-    if (maxSize > 0) {
-      const oversized = files.filter(f => f.size > maxSize)
-      if (oversized.length > 0) {
-        const label = formatFileSize(maxSize)
-        onError(`文件超过大小限制（${label}）`)
-      }
-      files = files.filter(f => f.size <= maxSize)
-    }
-    if (files.length > 0) {
-      onFiles(files)
-    }
+    const selected = selectFiles(files, { accept, multiple, maxSize, onError })
+    if (selected.length > 0) onFiles(selected)
   }
 
   return zone
