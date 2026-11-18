@@ -87,7 +87,7 @@
 }
 .vt-tab:hover { color: var(--color-text-primary); }
 .vt-tab.active {
-  background: linear-gradient(135deg, var(--color-accent), #ff7088);
+  background: var(--color-accent-solid);
   color: #fff;
   box-shadow: var(--glow-accent);
 }
@@ -155,7 +155,7 @@
 .vt-progress-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(135deg, var(--color-accent), #ff7088);
+  background: var(--color-accent-solid);
   transition: width var(--transition-fast);
 }
 .vt-progress-label {

@@ -23,7 +23,7 @@
 }
 .cl-tab:hover { color: var(--color-text-primary); }
 .cl-tab.active {
-  background: linear-gradient(135deg, var(--color-accent), #ff7088);
+  background: var(--color-accent-solid);
   color: #fff;
   box-shadow: var(--glow-accent);
 }

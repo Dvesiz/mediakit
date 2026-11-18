@@ -25,16 +25,11 @@ async function navigate(toolId) {
   if (!toolId) {
     content.innerHTML = `
       <section id="tool-home" class="tool-page active">
-        <div class="hero">
-          <div class="hero-index">工作台 / 概览</div>
-          <div class="hero-copy">
-            <p class="eyebrow">MEDIAKIT LOCAL STUDIO</p>
-            <h1>媒体工具工作台</h1>
-          </div>
-          <div class="hero-meta"><span>7 个模块</span><span>本地处理</span><span>零上传</span></div>
-          <p class="subtitle">选择工具开始处理。文件始终仅在当前浏览器会话中使用。</p>
-          <div class="tool-grid" id="tool-grid"></div>
+        <div class="page-heading">
+          <h1>工作台</h1>
+          <span class="tool-count">7 个工具</span>
         </div>
+        <div class="tool-grid" id="tool-grid"></div>
       </section>`
     renderHomeGrid()
     updateNavActive(null)
@@ -46,7 +41,7 @@ async function navigate(toolId) {
 
   try {
     const module = await loader()
-    content.innerHTML = '<div id="tool-container"></div>'
+    content.innerHTML = '<a class="back-link" href="#/">← 工作台</a><div id="tool-container"></div>'
     currentCleanup = typeof module.render === 'function' ? module.render(document.getElementById('tool-container')) : null
     updateNavActive(toolId)
   } catch (error) {
@@ -57,18 +52,33 @@ async function navigate(toolId) {
 
 function renderHomeGrid() {
   const tools = [
-    { id: 'image-compress', icon: ICONS.compress, name: '图片压缩', desc: '压缩 PNG/JPG/WebP，实时预览对比，支持批量处理', tag: 'IMAGE' },
-    { id: 'format-convert', icon: ICONS.convert, name: '格式转换', desc: '图片、视频、音频格式互转', tag: 'CONVERT' },
-    { id: 'image-edit', icon: ICONS.edit, name: '图片编辑', desc: '裁剪、旋转、翻转与滤镜处理', tag: 'EDIT' },
-    { id: 'video-tools', icon: ICONS.video, name: '视频工具', desc: '视频压缩、转 GIF 与格式转换', tag: 'VIDEO' },
-    { id: 'audio-tools', icon: ICONS.audio, name: '音频工具', desc: '音频压缩、格式转换与音量调整', tag: 'AUDIO' },
-    { id: 'qr-workshop', icon: ICONS.qrcode, name: '二维码工坊', desc: '生成、解析二维码与 WiFi 配置', tag: 'QR CODE' },
-    { id: 'color-lab', icon: ICONS.color, name: '颜色实验室', desc: '图片取色、调色板与颜色转换', tag: 'COLOR' },
+    { name: '图片', tools: [
+      ['image-compress', ICONS.compress, '图片压缩', 'PNG · JPEG · WebP'],
+      ['format-convert', ICONS.convert, '格式转换', 'PNG · JPEG · WebP · BMP'],
+      ['image-edit', ICONS.edit, '图片编辑', '裁剪 · 旋转 · 滤镜'],
+    ] },
+    { name: '音视频', tools: [
+      ['video-tools', ICONS.video, '视频工具', 'MP4 · WebM · GIF'],
+      ['audio-tools', ICONS.audio, '音频工具', 'MP3 · WAV · OGG · AAC'],
+    ] },
+    { name: '创作辅助', tools: [
+      ['qr-workshop', ICONS.qrcode, '二维码工坊', '生成 · 解析 · Wi-Fi'],
+      ['color-lab', ICONS.color, '颜色实验室', '取色 · 调色板 · 对比度'],
+    ] },
   ]
   const grid = document.getElementById('tool-grid')
   if (!grid) return
-  grid.innerHTML = tools.map(t => `<button class="tool-card" data-tool="${t.id}" type="button"><span class="tool-icon">${t.icon}</span><span class="tool-name">${t.name}</span><span class="tool-desc">${t.desc}</span><span class="tool-tag">${t.tag}</span></button>`).join('')
-  grid.querySelectorAll('.tool-card').forEach(card => card.addEventListener('click', () => { window.location.hash = `#/${card.dataset.tool}` }))
+  grid.innerHTML = tools.map(group => `
+    <section class="tool-group">
+      <h2>${group.name}</h2>
+      <ul>${group.tools.map(([id, icon, name, details]) => `
+        <li><a class="tool-card" href="#/${id}">
+          <span class="tool-icon">${icon}</span>
+          <span><strong class="tool-name">${name}</strong><small class="tool-desc">${details}</small></span>
+          <span class="tool-arrow" aria-hidden="true">↗</span>
+        </a></li>`).join('')}
+      </ul>
+    </section>`).join('')
 }
 
 function updateNavActive(toolId) {
